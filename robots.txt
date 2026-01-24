@@ -1,0 +1,23 @@
+```
+
+**Basic robots.txt:**
+```
+User-agent: *
+Allow: /
+
+Sitemap: https://andregiske.com/sitemap.xml
+```
+
+**Details:**
+- `User-agent: *` - Applies to all search engine bots
+- `Allow: /` - Allow crawling of all pages
+- `Sitemap:` - Optional, tells bots where your sitemap is
+
+**To block certain areas:**
+```
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /hw1/report.html
+
+Sitemap: https://andregiske.com/sitemap.xml

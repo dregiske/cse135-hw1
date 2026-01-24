@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andre Giske - About Me</title>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Andre Giske</h1>
+        <p><a href="../index.html">← Back to Home</a></p>
+    </div>
+
+    <div class="team-info">
+        <h2>About Me</h2>
+        <p>I'm a Computer Science student at UC San Diego.</p>
+        
+        <h3>Interests</h3>
+        <ul>
+            <li>Web Development</li>
+            <li>Server Administration</li>
+            <li>Cloud Computing</li>
+        </ul>
+
+        <h3>Skills</h3>
+        <ul>
+            <li>HTML, CSS, JavaScript</li>
+            <li>Linux/Ubuntu</li>
+            <li>Apache Configuration</li>
+            <li>DNS Management</li>
+        </ul>
+
+        <h3>Fun Fact</h3>
+        <p>I LOVE CSE135!</p>
+        
+        <h3>Contact</h3>
+        <p>Email: agiske@ucsd.edu</p>
+    </div>
+
+    <script>
+        // Add some JavaScript for fun
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Welcome to Andre\'s page!');
+            
+            // Display current time
+            const now = new Date();
+            const timeDiv = document.createElement('p');
+            timeDiv.textContent = `Page loaded at: ${now.toLocaleString()}`;
+            timeDiv.style.fontStyle = 'italic';
+            timeDiv.style.marginTop = '20px';
+            document.body.appendChild(timeDiv);
+        });
+    </script>
+</body>
+</html>
