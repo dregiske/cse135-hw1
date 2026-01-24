@@ -1,0 +1,4 @@
+<IfModule mod_headers.c>
+    Header always unset Server
+    Header always set Server "CSE135 Server"
+</IfModule>
