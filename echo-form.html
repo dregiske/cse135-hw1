@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Echo Test Form</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="header">
+        <h1>Echo Test Form</h1>
+        <p>Test your echo endpoints</p>
+    </div>
+
+    <div class="homework-section">
+        <h2>Echo Form</h2>
+
+        <!-- JS-enabled form (hidden if JS is off via noscript swap) -->
+        <form id="echo-form" method="GET" action="/cgi-bin/python/echo-python.py">
+            <h3>Language</h3>
+            <select name="language" id="language-select">
+                <option value="/cgi-bin/python/echo-python.py">Python</option>
+                <option value="/cgi-bin/php/echo-php.php">PHP</option>
+                <option value="/cgi-bin/node/echo-node">Node.js</option>
+            </select>
+
+            <h3>HTTP Method</h3>
+            <select name="method" id="method-select">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+
+            <h3>Encoding</h3>
+            <select name="encoding" id="encoding-select">
+                <option value="x-www-form-urlencoded">x-www-form-urlencoded</option>
+                <option value="application/json">application/json</option>
+            </select>
+
+            <h3>Fields</h3>
+            <label>Name: </label><input type="text" name="name" id="input-name" /><br /><br />
+            <label>Message: </label><input type="text" name="message" id="input-message" /><br /><br />
+
+            <input type="submit" value="Submit" id="submit-btn" />
+        </form>
+
+        <!-- Response display area -->
+        <div id="response-area" style="margin-top: 30px; display: none;">
+            <h3>Response</h3>
+            <iframe id="response-frame" style="width: 100%; height: 300px; border: 1px solid #2a2a4a; border-radius: 8px; background: #16213e;"></iframe>
+        </div>
+    </div>
+
+    <!-- Fallback forms for when JS is off — one per language/method combo -->
+    <noscript>
+        <div class="homework-section">
+            <h2>JS Off — Use These Forms</h2>
+
+            <h3>Python — GET</h3>
+            <form method="GET" action="/cgi-bin/python/echo-python.py">
+                <label>Name: </label><input type="text" name="name" /><br /><br />
+                <label>Message: </label><input type="text" name="message" /><br /><br />
+                <input type="submit" value="Submit (Python GET)" />
+            </form>
+
+            <h3>Python — POST</h3>
+            <form method="POST" action="/cgi-bin/python/echo-python.py">
+                <label>Name: </label><input type="text" name="name" /><br /><br />
+                <label>Message: </label><input type="text" name="message" /><br /><br />
+                <input type="submit" value="Submit (Python POST)" />
+            </form>
+
+            <h3>PHP — GET</h3>
+            <form method="GET" action="/cgi-bin/php/echo-php.php">
+                <label>Name: </label><input type="text" name="name" /><br /><br />
+                <label>Message: </label><input type="text" name="message" /><br /><br />
+                <input type="submit" value="Submit (PHP GET)" />
+            </form>
+
+            <h3>PHP — POST</h3>
+            <form method="POST" action="/cgi-bin/php/echo-php.php">
+                <label>Name: </label><input type="text" name="name" /><br /><br />
+                <label>Message: </label><input type="text" name="message" /><br /><br />
+                <input type="submit" value="Submit (PHP POST)" />
+            </form>
+
+            <h3>Node.js — GET</h3>
+            <form method="GET" action="/cgi-bin/node/echo-node">
+                <label>Name: </label><input type="text" name="name" /><br /><br />
+                <label>Message: </label><input type="text" name="message" /><br /><br />
+                <input type="submit" value="Submit (Node GET)" />
+            </form>
+
+            <h3>Node.js — POST</h3>
+            <form method="POST" action="/cgi-bin/node/echo-node">
+                <label>Name: </label><input type="text" name="name" /><br /><br />
+                <label>Message: </label><input type="text" name="message" /><br /><br />
+                <input type="submit" value="Submit (Node POST)" />
+            </form>
+        </div>
+    </noscript>
+
+    <script>
+        const form = document.getElementById('echo-form');
+        const languageSelect = document.getElementById('language-select');
+        const methodSelect = document.getElementById('method-select');
+        const encodingSelect = document.getElementById('encoding-select');
+        const submitBtn = document.getElementById('submit-btn');
+        const responseArea = document.getElementById('response-area');
+        const responseFrame = document.getElementById('response-frame');
+
+        // Update form action when language changes
+        languageSelect.addEventListener('change', function() {
+            form.action = this.value;
+        });
+
+        // Update form method when method changes
+        methodSelect.addEventListener('change', function() {
+            form.method = this.value;
+        });
+
+        // Handle submit
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const url = languageSelect.value;
+            const method = methodSelect.value;
+            const encoding = encodingSelect.value;
+            const name = document.getElementById('input-name').value;
+            const message = document.getElementById('input-message').value;
+
+            let body = null;
+            let fullUrl = url;
+
+            if (method === 'GET') {
+                // Append params to URL
+                fullUrl += '?name=' + encodeURIComponent(name) + '&message=' + encodeURIComponent(message);
+            } else {
+                // Build body based on encoding
+                if (encoding === 'application/json') {
+                    body = JSON.stringify({ name: name, message: message });
+                } else {
+                    body = 'name=' + encodeURIComponent(name) + '&message=' + encodeURIComponent(message);
+                }
+            }
+
+            // Use fetch to send the request
+            fetch(fullUrl, {
+                method: method,
+                headers: method !== 'GET' ? { 'Content-Type': encoding } : {},
+                body: body
+            })
+            .then(response => response.text())
+            .then(html => {
+                // Show response in iframe
+                responseArea.style.display = 'block';
+                responseFrame.srcdoc = html;
+            })
+            .catch(err => {
+                responseArea.style.display = 'block';
+                responseFrame.srcdoc = '<p style="color:red;">Error: ' + err.message + '</p>';
+            });
+        });
+    </script>
+</body>
+</html>
